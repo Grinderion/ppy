@@ -1,10 +1,17 @@
 # Importing tkinter for graphic user interface
 from tkinter import *
 
+# Global variable used to save the current status of a string
+# that shows the equation users builds by pressing buttons
 equation = ''
 
 
 def calculate():
+    """
+    Evaluating the equation string when equals(=) button is pressed
+    :return:
+        None
+    """
     try:
 
         global equation
@@ -21,16 +28,25 @@ def calculate():
         print("File Exists")
 
 
-# Clearing whole equation
 def clear_all():
+    """
+    Clearing equation string of all characters
+    :return:
+        None
+    """
     global equation
     equation = ''
     show_equation.set(equation)
 
 
-# Deleting last used button
-# If the show_equation string is empty the button tries to show previous completed calculation
 def clear():
+    """
+    Deleting last character on the equation string
+    If the show_equation string is empty the button tries to show previous completed equation
+    from calculation.txt text file and assigns it to equation string
+    :returns:
+        None
+    """
     global equation
     if len(equation) > 0:
         equation = equation[0:len(equation) - 1]
@@ -46,15 +62,26 @@ def clear():
                 show_equation.set(equation)
         except FileNotFoundError:
             print("Calculation File Does not Exist")
+        except IndexError:
+            # if the code is changed might need to change print to better represent errors
+            print("File is empty")
 
 
-# after pressing a button writes a adds a corresponding symbol to the string
 def press(button):
+    """
+    This function is used for all buttons that don't have specific function assigned to them
+    after registering pressing of a button adds a corresponding symbol to the equation string
+    params:
+        button: string that needs to be assigned when calling the function
+    returns:
+        None
+    """
     global equation
     equation += button
     show_equation.set(equation)
 
 
+# This part of the code contains gui
 if __name__ == "__main__":
     # window initialization
     gui = Tk()
