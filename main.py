@@ -1,4 +1,4 @@
-# Importing tkinter for graphic interface
+# Importing tkinter for graphic user interface
 from tkinter import *
 
 equation = ''
@@ -9,13 +9,16 @@ def calculate():
 
         global equation
 
+        temp = equation
         equation = str(eval(equation))
         show_equation.set(equation)
+        temp += '=' + equation + '\n'
+        with open('calculations.txt', 'a') as f:
+            f.write(temp)
+        f.close()
 
-    except:
-
-        show_equation.set(" error ")
-        equation = ""
+    except FileExistsError:
+        print("File Exists")
 
 
 # Clearing whole equation
@@ -26,13 +29,26 @@ def clear_all():
 
 
 # Deleting last used button
+# If the show_equation string is empty the button tries to show previous completed calculation
 def clear():
     global equation
     if len(equation) > 0:
         equation = equation[0:len(equation) - 1]
         show_equation.set(equation)
+    else:
+        try:
+            with open("calculations.txt", "r") as file:
+                last_line = file.readlines()[-1]
+            file.close()
+            if len(last_line) > 0:
+                pos = last_line.rfind('=')
+                equation = last_line[0:pos]
+                show_equation.set(equation)
+        except FileNotFoundError:
+            print("Calculation File Does not Exist")
 
 
+# after pressing a button writes a adds a corresponding symbol to the string
 def press(button):
     global equation
     equation += button
@@ -50,7 +66,7 @@ if __name__ == "__main__":
     expression_field = Entry(gui, textvariable=show_equation)
     expression_field.grid(columnspan=4, ipadx=100)
 
-    # Buttons that enable the usage of calculator
+    # Buttons that enable the usage of calculator and general lookout of the gui
     button1 = Button(gui, text=' 1 ', fg='white', bg='black', height=1, width=10, command=lambda: press('1'))
     button1.grid(row=2, column=0)
     button2 = Button(gui, text=' 2 ', fg='white', bg='black', height=1, width=10, command=lambda: press('2'))
@@ -94,5 +110,5 @@ if __name__ == "__main__":
     button_right_bracket = Button(gui, text=' ) ', fg='white', bg='black', height=1, width=10, command=lambda: \
         press(')'))
     button_right_bracket.grid(row=6, column=3)
-    # Looping the whole gui
+
     gui.mainloop()
