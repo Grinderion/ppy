@@ -21,51 +21,6 @@ def popup(string):
     b.grid(row=1, column=0)
 
 
-def evaluate(string):
-    bracket_stack = []
-    signs = ['+', '-', '*', '/']
-    calc_list = []
-    sign = ""
-    sign_pos = -1
-    min1 = -1
-    min2 = -1
-    answer = string
-    for pos in range(len(string)):
-        if string[pos] == "(":
-            bracket_stack.append(pos)
-        elif string[pos] == ")":
-            if len(bracket_stack) > 0:
-                pos1 = bracket_stack.pop()
-                temp = string[pos1:pos + 1]
-                temp = evaluate(temp)
-                answer = string[:pos1] + temp + string[pos + 1:]
-            else:
-                popup("Bracket closed before it was opened")
-                return string
-        elif string[pos] == '.':
-            if string[pos] in calc_list:
-                popup("Dot present two times in a single number")
-                return string
-            else:
-                continue
-        elif string[pos].isnumeric():
-            calc_list.append(string[pos])
-        elif string[pos] in signs:
-            if string[pos] == '-':
-                if len(calc_list) == 0 and min1 == -1:
-                    min1 = 0
-                elif string[pos - 1] in signs:
-                    if string[pos - 2] in signs:
-                        popup("Too many signs in a row")
-                        return string
-
-    if len(bracket_stack) != 0:
-        popup("Some brackets were not closed after opening them")
-        return string
-
-    return answer
-
-
 def bracket_number(string):
     """
     This function is just for eliminating brackets when we now that there is only a number inside
