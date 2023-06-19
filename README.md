@@ -21,3 +21,8 @@ Function used when Clear button is pressed.
 
 Depending on a state of equation string it deletes one character or when the string is empty
 function tries to take a string that was previously used
+
+# power(string):
+
+Function that takes a string with '^'(power) symbol and returns the result of number before the function 
+taken to the power of the number after the function.
